@@ -55,24 +55,25 @@ class OperatorParser:
             # handle the string with +=, -=, *=. /=
             v = instr[: m1.start()].rstrip(" ")
             v1 = v.strip(" ")
-            temp_list = [v1, m1.group()[:1], "(", instr[m1.end():].strip(" "), ")"]
-            nn = " ".join(temp_list)
-            result = v + " = " + self.rpn_to_nn(self.nn_to_rpn(nn))
+            expressions = [v1, m1.group()[: 1], "(", instr[m1.end():].strip(" "), ")"]
+            nn = " ".join(expressions)
+            result = v + " = " + self.rpn_to_nn(self.nn_to_rpn(nn)) + ";"
         else:
-            expressions = re.split(r"([<>=!]*=)", instr)
+            # split by <=, >=, ==, !=, ||
+            expressions = re.split(r"([<>=!]*=|\|\|)", instr)
             if len(expressions) == 1:
                 result = instr
             else:
                 for expression in expressions:
                     expression = expression.strip()
                     if re.search(r"[+\-*/]", expression):
-                        result += " " + self.rpn_to_nn(self.nn_to_rpn(expression)) + " "
+                        result += self.rpn_to_nn(self.nn_to_rpn(expression))
                     else:
-                        result += expression
+                        result += expression + " "
 
                 result += os.linesep
 
-        return result
+        return result.strip()
 
     def nn_to_rpn(self, nn):
         """ change normal notation to a reverse polish notation """
@@ -83,7 +84,6 @@ class OperatorParser:
         nn = re.sub("(?P<operator>[+\-*/])", add_spaces_operator, nn)
         nn = re.sub("(?P<operator>[(])", add_spaces_left_bracket, nn)
         nn = re.sub("(?P<operator>[)])", add_spaces_right_bracket, nn)
-
         items = re.split(r"\s+", nn)
         for item in items:
             if item in ["+", "-", "*", "/"]:
@@ -118,10 +118,10 @@ class OperatorParser:
     def f(self, x, o, y):
         return self.operators.get(o)(x, y)
 
-    def rpn_to_nn(self, temp_list):
+    def rpn_to_nn(self, expressions):
         """ change reverse polish notation to normal notation, replace the math operators by SafeMath operators """
         stack = []
-        for val in temp_list:
+        for val in expressions:
             if val in self.operators.keys():
                 y = stack.pop()
                 x = stack.pop()
@@ -129,4 +129,4 @@ class OperatorParser:
             else:
                 stack.append(val)
 
-        return stack.pop() + os.linesep
+        return stack.pop()

@@ -1,22 +1,20 @@
 pragma solidity ^0.4.19;
 
-contract C2 {
-    uint8 v1=1;
-    uint128 v2=1;
-    uint v3=1;
+import "./F11/C2.sol";
 
-    function randMod(uint _modulus) internal returns(uint) {
-        v1++;
-        v1--;
-        v1+=2;
-        v1-=2;
-        v1*=2;
-        v1/=2;
-        v1+=v1;
-        if((v1<=v1+2) || (v2>=v2-v3)){
-            v3-=v3*(v1-v2)/(v3-(v1+v2));
+contract C2 is C3 {
+    struct S2 {
+        uint24 v1;
+    }
+
+    S2[] public s2;
+
+    mapping(uint32 => address) public s2ToOwner;
+
+    function copy() external view returns(S1[]) {
+        for (uint i=0; i < s1ToOwner.length; i++) {
+            s2[i].v1*=s1[i].v1-(s1[i].v1+s1[i].v1/s1[i].v1);
         }
-        return v1;
     }
 
 }

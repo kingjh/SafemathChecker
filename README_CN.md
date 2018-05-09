@@ -5,6 +5,7 @@ SafeMath是一个专为支持安全数学运算而设计的可靠数学库：安
 1. 要检查的项目中的所有Solidity文件都命名为“*.sol”。
 2. 要检查的项目中的所有SafeMath文件都命名为“SafeMath*.sol”，它们的文件名与防止溢出的uint类型相同。例如，SafeMath8.sol将保护uint8计算。
 3. SafeMath.sol是#2的例外，它防止溢出的uint类型是uint（也是uint256）。
+4. 所有“*.sol”文件都是合法的。
 
 ## 运行环境
 * Windows，Linux
@@ -17,7 +18,7 @@ SafeMath是一个专为支持安全数学运算而设计的可靠数学库：安
 ```shell
 python./main.py
 ```
-然后您可以在“./bk”文件夹中找到备份文件，在“./to_check”文件夹中找到应用了SafeMath的新文件。
+然后您可以在“./backup”文件夹中找到备份文件，在“./to_check”文件夹中找到应用了SafeMath的新文件。
 
 ## 逻辑
 以“./example”文件夹中的文件为例：

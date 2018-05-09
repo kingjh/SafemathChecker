@@ -5,12 +5,10 @@ import shutil
 from SafeMathXref import SafeMathXref
 from OperatorParser import OperatorParser
 
-# import "./SafeMath16.sol";
-# using SafeMath16 for uint16;
 SAFE_MATH_FILE_NAME = "SafeMath"
 MATH_PATH = "math"
 TO_CHECK_PATH = "./to_check"
-BK_PATH = "./bk"
+BACKUP_PATH = "./backup"
 MAX_TIMES = 32
 BYTES = lambda x: str((x + 1) * 8) if x != MAX_TIMES - 1 else ""
 
@@ -34,7 +32,7 @@ def match_file_name(root, file_name):
         if file_name == SAFE_MATH_FILE_NAME + BYTES(i) + ".sol":
             # if it's a SafeMath*.sol file, record
             is_safe_math = True
-            safe_math_xrefs[i].safe_math_file_name = "./" + MATH_PATH + "/" + file_name
+            safe_math_xrefs[i].safe_math_file_name = full_path
             break
 
     # if it's a non SafeMath *.sol file, record
@@ -51,17 +49,20 @@ def search_safe_math_files():
 
 def parse_sol_files():
     """ parse *.sol files """
+    # delete backup files
+    shutil.rmtree(BACKUP_PATH, ignore_errors=True)
+
     is_uint_used = [False] * MAX_TIMES
     for sol_file_name in non_safe_math_file_names:
         # backup *.sol files
         paths = sol_file_name.split('/')
-        bk_path = BK_PATH + "/".join(paths[2: -1]) + "/"
-        bk_file_name = bk_path + basename(sol_file_name).split(".")[0] + "_bk.sol"
-        if not os.path.exists(bk_path):
-            os.makedirs(bk_path)
+        backup_path = BACKUP_PATH + "/".join(paths[2: -1]) + "/"
+        backup_file_name = backup_path + basename(sol_file_name).split(".")[0] + "_backup.sol"
+        if not os.path.exists(backup_path):
+            os.makedirs(backup_path)
 
-        shutil.move(sol_file_name, bk_file_name)
-        rfp = open(bk_file_name, 'r')
+        shutil.move(sol_file_name, backup_file_name)
+        rfp = open(backup_file_name, 'r')
         wfp = open(sol_file_name, 'w', newline="\n")
         rn = 0
         # contract row no
@@ -95,12 +96,18 @@ def parse_sol_files():
                         break
 
             operator_parser = OperatorParser()
-            # handle indent
-            indent = len(line) - len(line.lstrip())
-            leading_spaces = line[: indent]
-            new_lines.append(leading_spaces + operator_parser.replace_operators(line[indent:]))
+            # handle leading and trailing char
+            start_pos = len(line) - len(line.lstrip())
+            leading_char = line[: start_pos]
+            end_pos = len(line) - len(line.rstrip())
+            if (line[end_pos - 1: end_pos] == ";") or (line[end_pos - 1: end_pos] == "{"):
+                end_pos -= 1
+
+            trailing_char = line[end_pos:]
+            new_lines.append(leading_char + operator_parser.replace_operators(line[start_pos: end_pos]) + trailing_char)
             rn += 1
 
+        d = 1
         for i in range(0, MAX_TIMES):
             if is_uint_used[i] and not is_safe_math_imported[i]:
                 # import the missing SafeMath file
@@ -110,8 +117,9 @@ def parse_sol_files():
 
             if is_uint_used[i] and not is_safe_math_used[i]:
                 # use missing SafeMath file
-                new_lines.insert(crn + 1, "    using " + SAFE_MATH_FILE_NAME + BYTES(i) + " for uint" +
+                new_lines.insert(crn + d, "    using " + SAFE_MATH_FILE_NAME + BYTES(i) + " for uint" +
                                  BYTES(i) + ";" + os.linesep)
+                d += 1
 
         wfp.writelines(new_lines)
         wfp.flush()
@@ -151,10 +159,23 @@ def create_safe_math_file(safe_math_file_name, i):
 
 if __name__ == "__main__":
     # find and record the sol files' locations
-    search_safe_math_files()
+    # search_safe_math_files()
+    #
+    # # find all uint usages in *.sol files
+    # parse_sol_files()
+    #
+    # # create the missing SafeMath*.sol files
+    # create_missing_safe_math_files()
 
-    # find all uint usages in *.sol files
-    parse_sol_files()
+    # for testing
+    line = "            if((v1<= 3*(v1+2)) || (v2>=v2-v3)){    "
+    start_pos = len(line) - len(line.lstrip())
+    leading_char = line[: start_pos]
+    end_pos = len(line.rstrip(" "))
+    if (line[end_pos - 1: end_pos] == ";") or (line[end_pos - 1: end_pos] == "{"):
+        end_pos -= 1
 
-    # create the missing SafeMath*.sol files
-    create_missing_safe_math_files()
+    trailing_char = line[end_pos:]
+    operator_parser = OperatorParser()
+    print(line)
+    print(leading_char + operator_parser.replace_operators(line[start_pos: end_pos]) + trailing_char)

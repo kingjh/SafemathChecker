@@ -5,6 +5,7 @@ SafeMath is a solidity math library especially designed to support safe math ope
 1. All Solidity files in the project to be checked are named as "*.sol".
 2. All SafeMath files in the project to be checked are named as "SafeMath*.sol", and their file names are the same as the uint type they protect from overflow. e.g., SafeMath8.sol is to protect the uint8 calculation.
 3. SafeMath.sol is an exception of #2, it protects uint (uint256) from overflow.
+4. All "*.sol" files are valid.
   
 ## Running environment  
 * Windows, Linux  
@@ -17,7 +18,7 @@ Please copy the project to be checked to "./to_check" folder, the run:
 ```shell  
 python ./main.py  
 ```  
-Then you can find the backup files in "./bk" folder, the new files applying SafeMath in "./to_check" folder.
+Then you can find the backup files in "./backup" folder, the new files applying SafeMath in "./to_check" folder.
   
 ## Logic  
 Take the files in "./example" folder as an example:  

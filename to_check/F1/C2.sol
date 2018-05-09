@@ -1,22 +1,30 @@
 pragma solidity ^0.4.19;
 
-contract C2 {
-    uint8 v1=1;
-    uint128 v2=1;
-    uint v3=1;
+import "./F11/C2.sol";
+import "./math/SafeMath8.sol";
+import "./math/SafeMath16.sol";
+import "./math/SafeMath24.sol";
+import "./math/SafeMath32.sol";
+import "./math/SafeMath.sol";
 
-    function randMod(uint _modulus) internal returns(uint) {
-        v1++;
-        v1--;
-        v1+=2;
-        v1-=2;
-        v1*=2;
-        v1/=2;
-        v1+=v1;
-        if((v1<=v1+2) || (v2>=v2-v3)){
-            v3-=v3*(v1-v2)/(v3-(v1+v2));
-        }
-        return v1;
-    }
+contract C2 is C3 {
+    using SafeMath8 for uint8;
+    using SafeMath16 for uint16;
+    using SafeMath24 for uint24;
+    using SafeMath32 for uint32;
+    using SafeMath for uint;
+       struct S2 {
+               uint24 v1;
+       }
+
+       S2[] public s2;
+
+       mapping(uint32 => address) public s2ToOwner;
+
+       function copy() external view returns(S1[]) {
+               for (uint i=0; i < s1ToOwner.length; i++) {
+                       s2[i].v1*=s1[i].v1-(s1[i].v1+s1[i].v1/s1[i].v1);
+               }
+       }
 
 }

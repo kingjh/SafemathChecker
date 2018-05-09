@@ -1,22 +1,16 @@
 pragma solidity ^0.4.19;
+import "./math/SafeMath8.sol";
+import "./math/SafeMath16.sol";
 
-contract C2 {
-    uint8 v1=1;
-    uint128 v2=1;
-    uint v3=1;
+contract C3 {
+    using SafeMath8 for uint8;
+    using SafeMath16 for uint16;
+       struct S1 {
+               uint8 v1;
+       }
 
-    function randMod(uint _modulus) internal returns(uint) {
-        v1++;
-        v1--;
-        v1+=2;
-        v1-=2;
-        v1*=2;
-        v1/=2;
-        v1+=v1;
-        if((v1<=v1+2) || (v2>=v2-v3)){
-            v3-=v3*(v1-v2)/(v3-(v1+v2));
-        }
-        return v1;
-    }
+       S1[] public s1;
+
+       mapping(uint16 => address) public s1ToOwner;
 
 }
