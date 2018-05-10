@@ -24,9 +24,15 @@ python./main.py
 以“./example”文件夹中的文件为例：
 1. 将所有*.sol文件（不包括SafeMath*.sol文件）复制到“./bk”文件夹中。
 2. 检查所有*.sol文件（不包括SafeMath*.sol文件）以记录使用了哪些uint类型。
-3. 检查所有SafeMath*.sol文件，找出在没有SafeMath*.sol文件的情况下使用哪些uint类型（来自#1的结果）。例如，C1.sol定义了uint8变量v1，但项目中没有SafeMath8.sol文件。
-4. 根据#2的结果，在“./to_check/math”文件夹中创建所有缺少的SafeMath*.sol文件。例如，创建“./to_check/math/SafeMath8.sol”文件。
+3. 检查所有SafeMath*.sol文件，找出在没有SafeMath*.sol文件的情况下使用哪些uint类型（来自#1的结果）。例如，C1.sol定义了uint32变量v1，但项目中没有SafeMath32.sol文件。
+4. 根据#2的结果，在“./to_check/math”文件夹中创建所有缺少的SafeMath*.sol文件。例如，创建“./to_check/math/SafeMath32.sol”文件。
 5. 在*.sol文件的每个文件（不包括SafeMath*.sol文件）中：
 5.1. 导入所有SafeMath*.sol文件，并添加“using”语句。例如，添加“using SafeMath8 for uint8;”。
 5.2. 更改所有++为添加（1）， --为sub(1)。例如，将“v1++”改变为“v1.add(1)”。
-5.3. 如果运算符号之前/之后没有空格，则更改+， - ，*，/添加sub，mul，div，程序将在运算符号之前/之后添加“ ”。例如，将“v1<=v1 + 2”改变为“v1 <= v1.add(2)”。
+
+## 局限性
+1. 程序不支持数学运算符的左操作数是整数。例如，3*a，会被改变为3.mul(a)，这是非法的。
+2. 该程序不支持同一数学运算符的左操作数和右操作数跨2行的语句。例如：
+if (a>b
++1)
+不能被正确地处理

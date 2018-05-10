@@ -55,25 +55,50 @@ class OperatorParser:
             # handle the string with +=, -=, *=. /=
             v = instr[: m1.start()].rstrip(" ")
             v1 = v.strip(" ")
-            expressions = [v1, m1.group()[: 1], "(", instr[m1.end():].strip(" "), ")"]
-            nn = " ".join(expressions)
-            result = v + " = " + self.rpn_to_nn(self.nn_to_rpn(nn)) + ";"
-        else:
-            # split by <=, >=, ==, !=, ||
-            expressions = re.split(r"([<>=!]*=|\|\|)", instr)
+            expressions = [v1, m1.group()[: 1], "(", instr[m1.end():].strip().strip(";"), ");"]
+            instr = v + "= " + " ".join(expressions)
+
+        # split by !, &&, ||
+        equations = re.split(r"(!|&&|\|\||)", instr)
+        for equation in equations:
+            # split by <=, >=, ==, !=, =
+            expressions = re.split(r"([<>=!]*=)", equation)
             if len(expressions) == 1:
-                result = instr
+                result += equation
             else:
                 for expression in expressions:
-                    expression = expression.strip()
                     if re.search(r"[+\-*/]", expression):
-                        result += self.rpn_to_nn(self.nn_to_rpn(expression))
+                        # with math operators
+                        # 0.exclude ;
+                        rc = ""
+                        pos = expression.find(';')
+                        if pos != -1:
+                            rc = expression[pos:]
+                            expression = expression[:pos]
+
+                        # 1.exclude independent ( or )
+                        lbc = expression.count("(")
+                        rbc = expression.count(")")
+                        lc = ""
+                        if lbc > rbc:
+                            # ( is more than )
+                            pos = expression.replace('(', 'X', lbc - rbc - 1).find('(')
+                            lc = expression[: pos + 1]
+                            expression = expression[pos + 1:]
+                        else:
+                            if lbc < rbc:
+                                # ( is less than )
+                                pos = 'X'.join(expression.rsplit(')', rbc - lbc - 1)).rfind(')')
+                                rc = expression[pos:] + rc
+                                expression = expression[:pos]
+
+                        # 2.change normal notation to RPN, in order to change math operators to SafeMath operators
+                        # 3.change RPN to normal notation
+                        result += lc + self.rpn_to_nn(self.nn_to_rpn(expression)) + rc
                     else:
-                        result += expression + " "
+                        result += expression
 
-                result += os.linesep
-
-        return result.strip()
+        return result
 
     def nn_to_rpn(self, nn):
         """ change normal notation to a reverse polish notation """
@@ -81,6 +106,7 @@ class OperatorParser:
         ops = []
 
         # handle +-*/) to add a space before and the operator
+        nn = nn.strip()
         nn = re.sub("(?P<operator>[+\-*/])", add_spaces_operator, nn)
         nn = re.sub("(?P<operator>[(])", add_spaces_left_bracket, nn)
         nn = re.sub("(?P<operator>[)])", add_spaces_right_bracket, nn)
