@@ -105,11 +105,13 @@ class OperatorParser:
         expression = []
         ops = []
 
-        # handle +-*/) to add a space before and the operator
+        # handle +-*/) to add a space before and after the operator
         nn = nn.strip()
-        nn = re.sub("(?P<operator>[+\-*/])", add_spaces_operator, nn)
-        nn = re.sub("(?P<operator>[(])", add_spaces_left_bracket, nn)
-        nn = re.sub("(?P<operator>[)])", add_spaces_right_bracket, nn)
+        nn = re.sub(r"(?P<operator>[+\-*/])", add_spaces_operator, nn)
+        # handle the wrongly replaced " *  * "(maybe many spaces around *) to "**"
+        nn = re.sub(r" *\* {2}\* *", "**", nn)
+        nn = re.sub(r"(?P<operator>[(])", add_spaces_left_bracket, nn)
+        nn = re.sub(r"(?P<operator>[)])", add_spaces_right_bracket, nn)
         items = re.split(r"\s+", nn)
         for item in items:
             if item in ["+", "-", "*", "/"]:

@@ -46,8 +46,6 @@ def search_safe_math_files():
         for file_name in files:
             match_file_name(root, file_name)
 
-    print(non_safe_math_file_names)
-
 
 def parse_sol_files():
     """ parse *.sol files """
@@ -59,7 +57,7 @@ def parse_sol_files():
         # backup *.sol files
         paths = sol_file_name.split(os.sep)
         backup_path = BACKUP_PATH + os.sep + os.sep.join(paths[2: -1]) + os.sep
-        backup_file_name = backup_path + basename(sol_file_name).split(".")[0] + "_bak.sol"
+        backup_file_name = backup_path + basename(sol_file_name).split(".")[0] + ".sol"
         if not os.path.exists(backup_path):
             os.makedirs(backup_path)
 
