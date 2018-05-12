@@ -1,5 +1,5 @@
 # Solidity SafeMath Checker - 检查Solidity合同中的是否有数学计算未使用SafeMath并修复
-SafeMath是一个专为支持安全数学运算而设计的可靠数学库：安全意味着它在使用uint时防止溢出。你可以在[zeppelin-solidity SafeMath]中找到它（https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/math/SafeMath.sol）。
+SafeMath是一个专为支持安全数学运算而设计的可靠数学库：安全意味着它在使用uint时防止溢出。你可以在[zeppelin-solidity SafeMath](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/math/SafeMath.sol)中找到它。
 
 ## 工作流程
 请将要检查的项目复制到“./to_check”文件夹中，运行：
@@ -36,4 +36,5 @@ python./main.py
 if (a>b
 +1)
 不能被正确地处理
-3. 程序无法保护**，<<，>>的结果不会溢出。
+3. 程序无法保护**，<<的结果不会溢出。 
+你可以在[Avoiding Integer Overflows: SafeMath Isn't Enough](https://programtheblockchain.com/posts/2018/04/27/avoiding-integer-overflows-safemath-isnt-enough/)中找到保护这些运算的思路。
