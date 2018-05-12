@@ -11,7 +11,7 @@ Then you can find the backup files in "./backup" folder, the new files applying 
 ## File Requirements  
 1. All Solidity files in the project to be checked are named as "*.sol".
 2. All SafeMath files in the project to be checked are named as "SafeMath*.sol", and their file names are the same as the uint type they protect from overflow. e.g., SafeMath8.sol is to protect the uint8 calculation.
-3. SafeMath.sol is an exception of #2, it protects uint (uint256) from overflow.
+Please note there will be no SafeMath256.sol file but SafeMath.sol, which protects uint (uint256) from overflow.
 4. All "*.sol" files are valid.
   
 ## Running environment  
@@ -52,7 +52,7 @@ python./main.py
 ## 文件要求
 1. 要检查的项目中的所有Solidity文件都命名为“*.sol”。
 2. 要检查的项目中的所有SafeMath文件都命名为“SafeMath*.sol”，它们的文件名与防止溢出的uint类型相同。例如，SafeMath8.sol将保护uint8计算。
-3. 在#2中，需要排除SafeMath.sol，因为它防止溢出的uint类型是uint（也是uint256）。
+请注意，防止uint和uint256的溢出的是SafeMath.sol，而不是SafeMath256.sol。
 4. 所有“*.sol”文件都是合法的。
 
 ## 运行环境
