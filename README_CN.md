@@ -18,7 +18,7 @@ python./main.py
 * Windows，Linux
 
 ## 软件要求
-*与Anaconda lib的Python3
+* 安装了Anaconda的Python3
 
 ## 逻辑
 以“./example”文件夹中的文件为例（“./example/backup”存储了运行程序前的文件，“./example/to_check”存储了运行程序后的文件）：
