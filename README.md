@@ -8,8 +8,10 @@ python ./main.py
 ```  
 Then you can find the backup files in "./backup" folder, the new files applying SafeMath in "./to_check" folder.
 Please note: if you encounter the exception below, please ignore it:
+```shell  
 re.py:212: FutureWarning: split() requires a non-empty pattern match.
   return _compile(pattern, flags).split(string, maxsplit)
+```
   
 ## File Requirements  
 1. All Solidity files in the project to be checked are named as "*.sol".
@@ -52,8 +54,10 @@ python./main.py
 ```
 然后您可以在“./backup”文件夹中找到备份文件，在“./to_check”文件夹中找到应用了SafeMath的新文件。
 请注意：如果你遇到以下异常，请忽略它：
+```shell  
 re.py:212: FutureWarning: split() requires a non-empty pattern match.
   return _compile(pattern, flags).split(string, maxsplit)
+```  
 
 ## 文件要求
 1. 要检查的项目中的所有Solidity文件都命名为“*.sol”。
