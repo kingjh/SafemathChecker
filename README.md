@@ -1,4 +1,4 @@
-# Solidity SafeMath Checker - check and fix if any math calculations in your solidity contracts don't use SafeMath
+# Solidity SafeMath Checker - check if any math calculations in your solidity contracts don't use SafeMath. If yes, replace the math operators by SafeMath operators.
 SafeMath is a solidity math library especially designed to support safe math operations: safe means that it prevents overflow when working with uint. You can find it in [zeppelin-solidity SafeMath](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/math/SafeMath.sol).  
   
 ## Workflow  
@@ -42,7 +42,7 @@ cannot be parsed correctly.
 3. The program cannot protect the result of **, << from overflow. You can find how to protect them in [Avoiding Integer Overflows: SafeMath Isn't Enough](https://programtheblockchain.com/posts/2018/04/27/avoiding-integer-overflows-safemath-isnt-enough/).  
 
 
-# Solidity SafeMath Checker - 检查Solidity合同中的是否有数学计算未使用SafeMath并修复
+# Solidity SafeMath Checker - 检查Solidity合同中的是否有数学计算未使用SafeMath。如有，替换数学符号为SafeMath运算符
 SafeMath是一个专为支持安全数学运算而设计的可靠数学库：安全意味着它在使用uint时防止溢出。你可以在[zeppelin-solidity SafeMath](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/math/SafeMath.sol)中找到它。
 
 ## 工作流程
